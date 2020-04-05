@@ -73,7 +73,7 @@ function filter(minimum = 10) {
 	renderers.forEach(({ el, views }) => {
 		let meta = el.querySelector('#meta')
 		let progress = document.createElement('progress')
-		progress.innerHTML = `<progress class="progress is-success is-large" value="${views}" max="${average}">${views}</progress>`
+		progress.innerHTML = `<progress class="progress" style="margin-top: 0.5rem;" value="${views}" max="${average}">${views}</progress>`
 		meta.appendChild(progress.firstElementChild)
 	})
 }
