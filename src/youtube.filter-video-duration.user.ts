@@ -8,7 +8,8 @@
 // ==/UserScript==
 
 function addBulma() {
-	let style = document.getElementById('bulma') as HTMLStyleElement
+	/** @type HTMLStyleElement */
+	let style = document.getElementById('bulma')
 	if (style) return style
 	let bulma = GM_getResourceText('bulma')
 	style = GM_addStyle(bulma.slice(bulma.indexOf('.is-clearfix::after')))
@@ -46,27 +47,34 @@ function getVideoRenderers() {
 			viewCount = label.match(/ (?<views>[\d,]+) views /)?.groups?.views
 		}
 		return {
-			el,
 			title: el.data.title?.simpleText || el.data.title?.runs[0]?.text,
-			views: Number.parseInt(viewCount?.replace(/[^\d]/g, '')) || 0,
 			duration: el.data.lengthText?.simpleText || 'live',
+			views: Number.parseInt(viewCount?.replace(/[^\d]/g, '')) || 0,
 			published: el.data.publishedTimeText?.simpleText || 'live',
 			channel: (el.data.ownerText || el.data.longBylineText)?.runs[0]?.text,
 			id: el.data.videoId,
+			el,
 		}
 	})
 }
 
 function filter(minimum = 10) {
 	addBulma()
-	getVideoRenderers().forEach(({ el }) => {
-		let overlaytime = el.querySelector('ytd-thumbnail-overlay-time-status-renderer')
-		let time = overlaytime.textContent.trim()
-		let split = time.split(':').reverse()
+	let renderers = getVideoRenderers().filter(({ el, duration }) => {
+		if (duration == 'live') return true
+		let split = duration.split(':').reverse()
 		let [seconds, minutes, hours] = split.map(Number)
 		if (hours) minutes += hours * 60
-		if (minutes >= minimum) return
+		if (minutes >= minimum) return true
 		el['style'].display = 'none'
+	})
+	let views = renderers.map((v) => v.views)
+	let average = views.reduce((target, value) => target + value, 0) / views.length
+	renderers.forEach(({ el, views }) => {
+		let meta = el.querySelector('#meta')
+		let progress = document.createElement('progress')
+		progress.innerHTML = `<progress class="progress is-success is-large" value="${views}" max="${average}">${views}</progress>`
+		meta.appendChild(progress.firstElementChild)
 	})
 }
 
