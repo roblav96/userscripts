@@ -7,6 +7,15 @@
 // @resource bulma https://cdn.jsdelivr.net/npm/bulma/css/bulma.min.css
 // ==/UserScript==
 
+function addBulma() {
+	let style = document.getElementById('bulma') as HTMLStyleElement
+	if (style) return style
+	let bulma = GM_getResourceText('bulma')
+	style = GM_addStyle(bulma.slice(bulma.indexOf('.is-clearfix::after')))
+	style.setAttribute('id', 'bulma')
+	return style
+}
+
 function getVideoRenderers() {
 	let renderers = Array.from(document.all).filter((el) => {
 		let tag = el.tagName.toLowerCase()
@@ -49,11 +58,7 @@ function getVideoRenderers() {
 }
 
 function filter(minimum = 10) {
-	/** @type string */
-	let bulma = GM_getResourceText('bulma')
-	bulma = bulma.slice(bulma.indexOf('.is-clearfix::after'))
-	console.log('bulma ->', bulma)
-	console.log('GM_addStyle -> %O', GM_addStyle(bulma))
+	addBulma()
 	getVideoRenderers().forEach(({ el }) => {
 		let overlaytime = el.querySelector('ytd-thumbnail-overlay-time-status-renderer')
 		let time = overlaytime.textContent.trim()
