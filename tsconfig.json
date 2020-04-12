@@ -1,13 +1,14 @@
 {
 	"compilerOptions": {
 		"allowJs": true,
-		"baseUrl": ".",
+		"checkJs": true,
 		"lib": ["esnext", "dom"],
 		"module": "commonjs",
 		"outDir": "dist",
 		"preserveWatchOutput": true,
-		"target": "es2017"
+		"removeComments": true,
+		"target": "esnext"
 	},
 	"exclude": ["dist", "node_modules"],
-	"include": ["src/**/*.d.ts", "src/**/*.ts"]
+	"include": ["src/**/*.d.ts", "src/**/*"]
 }

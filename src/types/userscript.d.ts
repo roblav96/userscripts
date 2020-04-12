@@ -1,3 +1,7 @@
+declare const VM: {
+	registerShortcut(shortcut: string, callback: () => void): void
+}
+
 type GM_callback = (this: Window) => void
 
 declare const GM_info: {

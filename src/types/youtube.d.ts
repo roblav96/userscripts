@@ -1,4 +1,4 @@
-interface Element {
+interface YouTubeRendererElement extends HTMLElement {
 	data: YouTubeRendererData
 }
 

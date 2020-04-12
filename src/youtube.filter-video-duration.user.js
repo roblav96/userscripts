@@ -8,7 +8,6 @@
 // ==/UserScript==
 
 function addBulma() {
-	/** @type HTMLStyleElement */
 	let style = document.getElementById('bulma')
 	if (style) return style
 	let bulma = GM_getResourceText('bulma')
@@ -18,7 +17,9 @@ function addBulma() {
 }
 
 function getVideoRenderers() {
-	let renderers = Array.from(document.all).filter((el) => {
+	/** @type YouTubeRendererElement[] */
+	let elements = Array.from(document.querySelectorAll('*'))
+	let renderers = elements.filter((el) => {
 		let tag = el.tagName.toLowerCase()
 		if ((tag.startsWith('ytd-') && tag.endsWith('-video-renderer')) == false) return
 		if (el.getBoundingClientRect().height == 0) return
@@ -72,15 +73,22 @@ function filter(minimum = 10) {
 	let average = views.reduce((target, value) => target + value, 0) / views.length
 	renderers.forEach(({ el, views }) => {
 		let meta = el.querySelector('#meta')
+		meta.querySelector('progress')?.remove()
 		let progress = document.createElement('progress')
-		progress.innerHTML = `<progress class="progress" style="margin-top: 0.5rem;" value="${views}" max="${average}">${views}</progress>`
+		progress.innerHTML = `<progress class="progress is-small" style="margin-top: 0.5rem;" value="${views}" max="${average}">${views}</progress>`
 		meta.appendChild(progress.firstElementChild)
 	})
 }
 
+GM_registerMenuCommand('01', () => filter(1))
 GM_registerMenuCommand('05', () => filter(5))
 GM_registerMenuCommand('10', () => filter(10))
 GM_registerMenuCommand('15', () => filter(15))
 GM_registerMenuCommand('20', () => filter(20))
 GM_registerMenuCommand('30', () => filter(30))
 GM_registerMenuCommand('60', () => filter(60))
+
+/** @require https://cdn.jsdelivr.net/npm/@violentmonkey/shortcut */
+// VM.registerShortcut('Alt-Meta-¡', () => {
+// 	console.log(`Alt-Meta-¡ ->`)
+// })
