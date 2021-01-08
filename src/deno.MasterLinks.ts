@@ -1,0 +1,31 @@
+// ==UserScript==
+// @name deno.MasterLinks
+// @match https://deno.land/*
+// @run-at document-idle
+// @inject-into content
+// @noframes
+// ==/UserScript==
+
+function MasterLinks() {
+	if (document.readyState != 'complete') return false
+
+	let selects = Array.from(document.getElementsByTagName('select'))
+	let select = selects.find((el) => el.id == 'version')
+	if (select && select.value != 'master') select.value = 'master'
+
+	for (let el of Array.from(document.links).filter(Boolean)) {
+		if (!el.href) continue
+		let matchers = [
+			[/\b(@v\d+.\d+.\d+)\b/g, '@master'],
+			[/\b(v\d+.\d+.\d+)\b/g, 'master'],
+		] as [RegExp, string][]
+		for (let [matcher, replace] of matchers) {
+			if (!matcher.test(el.href)) continue
+			el.href = el.href.replaceAll(matcher, replace)
+			break
+		}
+	}
+
+	document.removeEventListener('readystatechange', MasterLinks)
+}
+MasterLinks() || document.addEventListener('readystatechange', MasterLinks)
