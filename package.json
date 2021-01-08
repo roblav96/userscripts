@@ -3,9 +3,8 @@
 	"version": "0.0.0",
 	"description": "UserScript environment for OpenUserJS",
 	"scripts": {
-		"build": "del dist; tsc --declaration",
 		"watch": "run-p watch:*",
-		"watch:serve": "http-server -c-1 -a 127.0.0.1 -p 8080 dist",
+		"watch:serve": "delay 3; http-server -c-1 -a 127.0.0.1 -p 8080 dist",
 		"watch:tsc": "del dist; tsc --watch --preserveWatchOutput"
 	},
 	"dependencies": {
@@ -18,6 +17,7 @@
 		"@types/lodash": "^4.14.167",
 		"@types/node": "^14.14.20",
 		"del-cli": "^3.0.1",
+		"delay-cli": "^1.1.0",
 		"dts-generate": "^1.5.0",
 		"http-server": "^0.12.3",
 		"node-env-dev": "^1.9.1",
