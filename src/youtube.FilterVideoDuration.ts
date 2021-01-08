@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name youtube.filter-video-duration
+// @name youtube.FilterVideoDuration
 // @match https://*.youtube.com/*
 // @grant GM_addStyle
 // @grant GM_getResourceText
@@ -17,8 +17,7 @@ function addBulma() {
 }
 
 function getVideoRenderers() {
-	/** @type YouTubeRendererElement[] */
-	let elements = Array.from(document.querySelectorAll('*'))
+	let elements = Array.from(document.querySelectorAll('*')) as YouTubeRendererElement[]
 	let renderers = elements.filter((el) => {
 		let tag = el.tagName.toLowerCase()
 		if ((tag.startsWith('ytd-') && tag.endsWith('-video-renderer')) == false) return
@@ -43,16 +42,16 @@ function getVideoRenderers() {
 		// 	),
 		// )
 		let label = el.data.title?.accessibility?.accessibilityData?.label
-		let viewCount = el.data.viewCountText?.simpleText || el.data.viewCountText?.runs[0]?.text
+		let viewCount = el.data.viewCountText?.simpleText || el.data.viewCountText?.runs?.[0]?.text
 		if (!viewCount?.replace(/[^\d]/g, '')) {
 			viewCount = label.match(/ (?<views>[\d,]+) views /)?.groups?.views
 		}
 		return {
-			title: el.data.title?.simpleText || el.data.title?.runs[0]?.text,
+			title: el.data.title?.simpleText || el.data.title?.runs?.[0]?.text,
 			duration: el.data.lengthText?.simpleText || 'live',
 			views: Number.parseInt(viewCount?.replace(/[^\d]/g, '')) || 0,
 			published: el.data.publishedTimeText?.simpleText || 'live',
-			channel: (el.data.ownerText || el.data.longBylineText)?.runs[0]?.text,
+			channel: (el.data.ownerText || el.data.longBylineText)?.runs?.[0]?.text,
 			id: el.data.videoId,
 			el,
 		}
