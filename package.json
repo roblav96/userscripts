@@ -4,25 +4,25 @@
 	"description": "UserScript environment for OpenUserJS",
 	"scripts": {
 		"watch": "run-p watch:*",
-		"watch:serve": "delay 3; http-server -c-1 -a 127.0.0.1 -p 8080 dist",
+		"watch:serve": "delay 3; http-server -c-1 -a 127.0.0.1 -p 13540 dist",
 		"watch:tsc": "del dist; tsc --watch --preserveWatchOutput"
 	},
 	"dependencies": {
-		"lodash": "^4.17.20",
-		"rambdax": "^7.1.0",
+		"lodash": "^4.17.21",
+		"rambdax": "^7.2.0",
 		"string-fn": "^3.1.0",
 		"tslib": "^2.1.0"
 	},
 	"devDependencies": {
-		"@types/lodash": "^4.14.167",
-		"@types/node": "^14.14.20",
+		"@types/lodash": "^4.14.168",
+		"@types/node": "^14.14.31",
 		"del-cli": "^3.0.1",
 		"delay-cli": "^1.1.0",
-		"dts-generate": "^1.5.0",
+		"dts-generate": "^2.0.0",
 		"http-server": "^0.12.3",
 		"node-env-dev": "^1.9.1",
 		"npm-run-all": "^4.1.5",
-		"typescript": "^4.1.3"
+		"typescript": "^4.2.2"
 	},
 	"license": "Unlicense",
 	"author": "Robert Laverty <roblav96@gmail.com> (https://github.com/roblav96)",

@@ -9,13 +9,12 @@
 		"experimentalDecorators": true,
 		"importHelpers": true,
 		"inlineSourceMap": true,
-		"lib": ["dom", "esnext"],
+		"lib": ["dom", "es2017"],
 		"module": "commonjs",
 		"moduleResolution": "node",
 		"noEmitHelpers": true,
 		"outDir": "dist",
-		"pretty": true,
-		"target": "esnext"
+		"target": "es2017"
 	},
 	"exclude": ["dist", "node_modules"],
 	"include": ["src/**/*.d.ts", "src/**/*"]

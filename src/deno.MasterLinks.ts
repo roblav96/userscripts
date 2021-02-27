@@ -21,7 +21,7 @@ function MasterLinks() {
 		] as [RegExp, string][]
 		for (let [matcher, replace] of matchers) {
 			if (!matcher.test(el.href)) continue
-			el.href = el.href.replaceAll(matcher, replace)
+			el.href = el.href.replace(matcher, replace)
 			break
 		}
 	}
