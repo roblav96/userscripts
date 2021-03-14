@@ -6,6 +6,12 @@ type GM_callback = (this: Window) => void
 
 declare const GM_info: {
 	uuid: string
+	platform: {
+		arch: string
+		browserName: string
+		browserVersion: string
+		os: string
+	}
 	script: {
 		name: string
 		namespace: string
@@ -25,13 +31,20 @@ declare const GM_info: {
 	injectInto: 'page' | 'content' | 'auto'
 }
 
-declare function GM_getValue<T>(key: string, defaultValue: T): T | undefined
+declare function GM_getValue<T = any>(key: string, defaultValue?: T): T
 
-declare function GM_setValue(key: string, value: unknown): void
+declare function GM_setValue(key: string, value: any): void
 
 declare function GM_deleteValue(key: string): void
 
 declare function GM_listValues(): string[]
+
+declare function GM_addValueChangeListener(
+	name: string,
+	callback: (name: string, oldValue: any, newValue: any, remote: boolean) => void,
+): void
+
+declare function GM_removeValueChangeListener(listenerId: string): void
 
 declare function GM_getResourceText(name: string): string | undefined
 
@@ -40,16 +53,24 @@ declare function GM_getResourceURL(name: string): string
 declare function GM_addStyle(css: string): HTMLStyleElement
 
 interface GM_tab {
-	close: () => void
-	closed: boolean
-	onclose: null | GM_callback
+	onclose?: GM_callback
+	closed?: boolean
+	close?: () => void
 }
 
-declare function GM_openInTab(url: string, options?: { active?: boolean }): GM_tab
+declare function GM_openInTab(
+	url: string,
+	options?: {
+		active?: boolean
+		container?: number
+		insert?: boolean
+		pinned?: boolean
+	},
+): GM_tab
 
 declare function GM_openInTab(url: string, openInBackground?: boolean): GM_tab
 
-declare function GM_registerMenuCommand(caption: string, func: GM_callback): void
+declare function GM_registerMenuCommand(caption: string, onClick: GM_callback): void
 
 declare function GM_unregisterMenuCommand(caption: string): void
 
@@ -59,14 +80,14 @@ declare function GM_notification(options: {
 	image?: string
 	onclick?: GM_callback
 	ondone?: GM_callback
-}): void
+}): { remove: Promise<void> }
 
 declare function GM_notification(
 	text: string,
 	title?: string,
 	image?: string,
 	onclick?: GM_callback,
-): void
+): { remove: Promise<void> }
 
 type GM_clipboardDataType =
 	| 'text/plain'
@@ -84,7 +105,7 @@ type GM_clipboardDataType =
 	| 'application/json'
 	| 'application/octet-stream'
 
-declare function GM_setClipboard(data: unknown, type?: GM_clipboardDataType): void
+declare function GM_setClipboard(data: string, type?: GM_clipboardDataType): void
 
 type GM_httpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'OPTION' | 'HEAD'
 
@@ -93,6 +114,7 @@ interface GM_httpResponseType {
 	json: object
 	blob: Blob
 	arraybuffer: ArrayBuffer
+	document: unknown
 }
 
 interface GM_progressEvent<K extends keyof GM_httpResponseType, C = unknown> {
@@ -106,7 +128,7 @@ interface GM_progressEvent<K extends keyof GM_httpResponseType, C = unknown> {
 }
 
 interface GM_httpRequestOptions<K extends keyof GM_httpResponseType, C = unknown> {
-	headers?: { [key: string]: string }
+	headers?: Record<string, string>
 	timeout?: number
 	onerror?: (this: Window, event: GM_progressEvent<K, C>) => void
 	onprogress?: (
@@ -133,12 +155,14 @@ declare function GM_xmlhttpRequest<K extends keyof GM_httpResponseType, C = unkn
 		overrideMimetype?: string
 		responseType?: K
 		data?: string | FormData | Blob
+		binary?: boolean
 		context?: C
 		anonymous?: boolean
 		synchronous?: boolean
 		onabort?: (this: Window, event: GM_progressEvent<K, C>) => void
 		onload?: (this: Window, event: GM_progressEvent<K, C>) => void
 		onloadend?: (this: Window, event: GM_progressEvent<K, C>) => void
+		onloadstart?: (this: Window, event: GM_progressEvent<K, C>) => void
 		onreadystatechange?: (this: Window, event: GM_progressEvent<K, C>) => void
 	} & GM_httpRequestOptions<K, C>,
 ): GM_httpResponse
