@@ -44,7 +44,7 @@ function getVideoRenderers() {
 		let label = el.data.title?.accessibility?.accessibilityData?.label
 		let viewCount = el.data.viewCountText?.simpleText || el.data.viewCountText?.runs?.[0]?.text
 		if (!viewCount?.replace(/[^\d]/g, '')) {
-			viewCount = label.match(/ (?<views>[\d,]+) views /)?.groups?.views
+			viewCount = label.match(/ (?<views>[\d,]+) views /)?.groups?.views!
 		}
 		return {
 			title: el.data.title?.simpleText || el.data.title?.runs?.[0]?.text,
@@ -71,11 +71,11 @@ function filter(minimum = 10) {
 	let views = renderers.map((v) => v.views)
 	let average = views.reduce((target, value) => target + value, 0) / views.length
 	renderers.forEach(({ el, views }) => {
-		let meta = el.querySelector('#meta')
+		let meta = el.querySelector('#meta')!
 		meta.querySelector('progress')?.remove()
 		let progress = document.createElement('progress')
 		progress.innerHTML = `<progress class="progress is-small" style="margin-top: 0.5rem;" value="${views}" max="${average}">${views}</progress>`
-		meta.appendChild(progress.firstElementChild)
+		meta.appendChild(progress.firstElementChild!)
 	})
 }
 

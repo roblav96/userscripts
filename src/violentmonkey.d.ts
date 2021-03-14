@@ -1,3 +1,5 @@
+/// <reference lib='dom' />
+
 declare const VM: {
 	registerShortcut(shortcut: string, callback: () => void): void
 }
