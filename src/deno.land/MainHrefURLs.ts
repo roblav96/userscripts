@@ -1,12 +1,15 @@
 // ==UserScript==
-// @name deno.MasterLinks
+// @name MainHrefURLs@deno.land
+// @namespace deno.land
 // @match https://deno.land/*
+// @downloadURL http://127.0.0.1:13540/deno.land/MainHrefURLs.user.js
+// @version {{date}}
 // @run-at document-idle
 // @inject-into content
 // @noframes
 // ==/UserScript==
 
-function MasterLinks() {
+function MainHrefURLs() {
 	if (document.readyState != 'complete') return false
 
 	let selects = Array.from(document.getElementsByTagName('select'))
@@ -26,6 +29,6 @@ function MasterLinks() {
 		}
 	}
 
-	document.removeEventListener('readystatechange', MasterLinks)
+	document.removeEventListener('readystatechange', MainHrefURLs)
 }
-MasterLinks() || document.addEventListener('readystatechange', MasterLinks)
+MainHrefURLs() || document.addEventListener('readystatechange', MainHrefURLs)

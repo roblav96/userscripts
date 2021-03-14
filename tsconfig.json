@@ -1,21 +1,8 @@
 {
 	"compilerOptions": {
-		"allowJs": true,
-		"allowSyntheticDefaultImports": true,
-		"baseUrl": ".",
-		"checkJs": true,
-		"emitDecoratorMetadata": true,
-		"esModuleInterop": false,
-		"experimentalDecorators": true,
-		"importHelpers": true,
-		"inlineSourceMap": true,
-		"lib": ["dom", "es2017"],
-		"module": "commonjs",
-		"moduleResolution": "node",
-		"noEmitHelpers": true,
-		"outDir": "dist",
-		"target": "es2017"
+		"lib": ["dom", "esnext", "deno.ns"],
+		"plugins": [{ "name": "typescript-deno-plugin", "unstable": true }]
 	},
 	"exclude": ["dist", "node_modules"],
-	"include": ["src/**/*.d.ts", "src/**/*"]
+	"include": ["**/*.d.ts", "**/*.ts"]
 }
