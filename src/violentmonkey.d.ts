@@ -46,7 +46,7 @@ declare function GM_addValueChangeListener(
 
 declare function GM_removeValueChangeListener(listenerId: string): void
 
-declare function GM_getResourceText(name: string): string | undefined
+declare function GM_getResourceText(name: string): string
 
 declare function GM_getResourceURL(name: string): string
 
