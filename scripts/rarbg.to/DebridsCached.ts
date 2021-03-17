@@ -2,10 +2,11 @@
 // @name DebridsCached@rarbg.to
 // @namespace rarbg.to
 // @match https://rarbg.to/*
-// @downloadURL http://127.0.0.1:13540/rarbg.to/DebridsCached.user.js
 // @run-at document-idle
 // @inject-into content
 // @noframes
+// @downloadURL
+// @version
 // ==/UserScript==
 
 document.addEventListener('readystatechange', (event) => {
