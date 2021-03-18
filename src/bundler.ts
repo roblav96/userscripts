@@ -49,5 +49,4 @@ export async function bundle(fpath: string) {
 	// 	await fs.ensureDir(path.dirname(distpath))
 	// 	await Deno.writeTextFile(distpath, `${header}\n\n${outsource}`)
 	// }
-
 }
