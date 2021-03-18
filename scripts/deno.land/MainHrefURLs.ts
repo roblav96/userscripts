@@ -2,8 +2,6 @@
 // @name MainHrefURLs@deno.land
 // @namespace deno.land
 // @match https://deno.land/*
-// @downloadURL http://127.0.0.1:13540/deno.land/MainHrefURLs.user.js
-// @version {{date}}
 // @run-at document-idle
 // @inject-into content
 // @noframes

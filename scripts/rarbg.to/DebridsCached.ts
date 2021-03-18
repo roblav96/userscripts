@@ -5,8 +5,6 @@
 // @run-at document-idle
 // @inject-into content
 // @noframes
-// @downloadURL
-// @version
 // ==/UserScript==
 
 document.addEventListener('readystatechange', (event) => {
