@@ -4,7 +4,7 @@
 	"description": "UserScript environment for OpenUserJS",
 	"scripts": {
 		"watch": "run-p watch:*",
-		"watch:serve": "delay 3; http-server -c-1 -a 127.0.0.1 -p 13540 dist",
+		"watch:serve": "delay 3; http-server -c-1 -a 127.0.0.1 -p 14023 dist",
 		"watch:tsc": "del dist; tsc --watch --preserveWatchOutput"
 	},
 	"dependencies": {

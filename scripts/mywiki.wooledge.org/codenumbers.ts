@@ -1,10 +1,11 @@
 // ==UserScript==
-// @name codenumbers
+// @name CodeNumbers@mywiki.wooledge.org
+// @namespace mywiki.wooledge.org
 // @match https://mywiki.wooledge.org/*
-// @run-at document-idle
-// @inject-into content
 // @noframes
 // ==/UserScript==
+
+import '../../types/violentmonkey.d.ts'
 
 document.addEventListener('readystatechange', function codenumbers(event) {
 	if (document.readyState != 'complete') return

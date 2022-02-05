@@ -1,14 +1,19 @@
 // ==UserScript==
-// @name youtube.FilterVideoDuration
+// @name FilterVideoDuration@youtube.com
+// @namespace youtube.com
 // @match https://*.youtube.com/*
+// @noframes
 // @grant GM_addStyle
 // @grant GM_getResourceText
 // @grant GM_registerMenuCommand
 // @resource bulma https://cdn.jsdelivr.net/npm/bulma/css/bulma.min.css
 // ==/UserScript==
 
+import '../../types/violentmonkey.d.ts'
+import { YouTubeRendererElement } from './youtube.d.ts'
+
 function addBulma() {
-	let style = document.getElementById('bulma')
+	let style = document.getElementById('bulma')!
 	if (style) return style
 	let bulma = GM_getResourceText('bulma')
 	style = GM_addStyle(bulma.slice(bulma.indexOf('.is-clearfix::after')))

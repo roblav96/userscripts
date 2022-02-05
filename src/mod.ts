@@ -12,6 +12,8 @@ export const DIRS = new (class Dirs {
 	dist = path.join(this.root, 'dist')
 })()
 
+await Deno.remove(DIRS.dist, { recursive: true })
+
 for await (let entry of fs.walk(DIRS.scripts, { exts: ['.ts'], skip: [/\.d\.ts$/] })) {
 	await bundle(entry.path)
 }

@@ -2,10 +2,10 @@
 // @name MainHrefURLs@deno.land
 // @namespace deno.land
 // @match https://deno.land/*
-// @run-at document-idle
-// @inject-into content
 // @noframes
 // ==/UserScript==
+
+import '../../types/violentmonkey.d.ts'
 
 function MainHrefURLs() {
 	if (document.readyState != 'complete') return false

@@ -23,6 +23,7 @@ export async function bundle(fpath: string) {
 	let header = fsource.split('// ==UserScript==')[1].split('// ==/UserScript==')[0]
 	header = `// ==UserScript==${header}// ==/UserScript==`
 
+	await fs.ensureDir(path.dirname(distpath))
 	let bundle = Deno.run({
 		cmd: ['deno', 'bundle', '--unstable', '--no-check', fpath, distpath],
 	})

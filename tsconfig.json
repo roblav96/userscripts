@@ -1,8 +1,0 @@
-{
-	"compilerOptions": {
-		"plugins": [{ "name": "typescript-deno-plugin", "unstable": true }],
-		"strict": true
-	},
-	"exclude": ["dist", "node_modules"],
-	"include": ["**/*.d.ts", "**/*.ts"]
-}
