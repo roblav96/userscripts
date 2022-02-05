@@ -5,10 +5,9 @@ import { DIRS } from './mod.ts'
 export async function bundle(fpath: string) {
 	// console.info('bundle ->', fpath)
 	let file = await Deno.open(fpath, { read: true })
-	let fstat = await file.stat()
-	let mtime = fstat.mtime?.valueOf()
+	let { isFile, mtime } = await file.stat()
 	file.close()
-	if (!fstat.isFile) return
+	if (!isFile) return
 
 	let distpath = path.join(DIRS.dist, path.relative(DIRS.scripts, fpath))
 	distpath = distpath.replace(/\.ts$/, '.user.js')
@@ -18,7 +17,10 @@ export async function bundle(fpath: string) {
 		'// ==/UserScript==',
 		`// @downloadURL ${path.toFileUrl(distpath).toString()}\n// ==/UserScript==`,
 	)
-	fsource = fsource.replace('// ==/UserScript==', `// @version ${mtime}\n// ==/UserScript==`)
+	fsource = fsource.replace(
+		'// ==/UserScript==',
+		`// @version ${mtime?.valueOf()}\n// ==/UserScript==`,
+	)
 	let header = fsource.split('// ==UserScript==')[1].split('// ==/UserScript==')[0]
 	header = `// ==UserScript==${header}// ==/UserScript==`
 
