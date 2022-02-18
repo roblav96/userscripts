@@ -19,3 +19,6 @@ run:
 	@deno run --unstable --no-check --allow-all src/mod.ts
 watch:
 	watchexec --clear --restart --watch=src --exts=ts --shell=bash -- just run
+
+serve:
+	miniserve --header 'Cache-Control: no-cache, no-store, must-revalidate' --interfaces=127.0.0.1 --port=14023 dist
