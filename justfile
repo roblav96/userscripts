@@ -14,7 +14,7 @@ install:
 run:
 	-@fd -tf -e ts -E '*.d.ts' -X deno cache --unstable --no-check
 	-@fd -tf -e ts -E '*.d.ts' -x deno cache --unstable
-	@deno run --unstable --no-check --allow-all src/mod.ts
+	-@deno run --unstable --no-check --allow-all src/mod.ts
 watch:
 	watchexec --clear --restart --watch=src --exts=ts --shell=bash -- 'echo -e "█ \n" && just run'
 
