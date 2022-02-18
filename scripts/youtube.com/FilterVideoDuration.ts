@@ -11,7 +11,7 @@
 
 import '../../types/violentmonkey.d.ts'
 
-import { YouTubeRendererElement } from './youtube.d.ts'
+import type { YouTubeRendererElement } from './youtube.d.ts'
 
 function addBulma() {
 	let style = document.getElementById('bulma')!

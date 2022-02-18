@@ -5,7 +5,7 @@
 // @noframes
 // ==/UserScript==
 
-// import '../../types/violentmonkey.d.ts'
+import '../../types/violentmonkey.d.ts'
 
 // document.addEventListener('readystatechange', (event) => {
 // if (document.readyState != 'complete') return
