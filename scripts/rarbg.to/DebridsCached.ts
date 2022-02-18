@@ -6,6 +6,7 @@
 // ==/UserScript==
 
 import '../../types/violentmonkey.d.ts'
+
 import onetime from 'https://cdn.skypack.dev/onetime?dts'
 import { StandardWebSocketClient } from 'https://deno.land/x/websocket/mod.ts'
 

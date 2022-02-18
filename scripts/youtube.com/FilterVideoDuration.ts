@@ -10,6 +10,7 @@
 // ==/UserScript==
 
 import '../../types/violentmonkey.d.ts'
+
 import { YouTubeRendererElement } from './youtube.d.ts'
 
 function addBulma() {

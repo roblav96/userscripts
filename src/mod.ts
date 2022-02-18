@@ -6,7 +6,7 @@ import * as http from 'https://deno.land/std/http/mod.ts'
 import * as path from 'https://deno.land/std/path/mod.ts'
 import { bundle } from './bundler.ts'
 
-export const DIRS = new (class Dirs {
+export const DIRS = new (class {
 	root = path.dirname(path.dirname(path.fromFileUrl(import.meta.url)))
 	scripts = path.join(this.root, 'scripts')
 	dist = path.join(this.root, 'dist')
