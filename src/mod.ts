@@ -13,7 +13,7 @@ export const DIRS = new (class {
 })()
 
 if (await fs.exists(DIRS.dist)) {
-	await Denos.remove(DIRS.dist, { recursive: true })
+	await Deno.remove(DIRS.dist, { recursive: true })
 }
 
 for await (let entry of fs.walk(DIRS.scripts, { exts: ['.ts'], skip: [/\.d\.ts$/] })) {
