@@ -5,7 +5,7 @@
 // @noframes
 // ==/UserScript==
 
-import '../../types/violentmonkey.d.ts'
+import type {} from '../../types/violentmonkey.d.ts'
 
 document.addEventListener('readystatechange', function codenumbers(event) {
 	if (document.readyState != 'complete') return

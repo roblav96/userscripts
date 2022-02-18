@@ -5,7 +5,7 @@
 // @noframes
 // ==/UserScript==
 
-import '../../types/violentmonkey.d.ts'
+import type {} from '../../types/violentmonkey.d.ts'
 
 function MainHrefURLs() {
 	if (document.readyState != 'complete') return false

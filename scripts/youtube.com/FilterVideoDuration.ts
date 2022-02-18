@@ -9,7 +9,7 @@
 // @resource bulma https://cdn.jsdelivr.net/npm/bulma/css/bulma.min.css
 // ==/UserScript==
 
-import '../../types/violentmonkey.d.ts'
+import type {} from '../../types/violentmonkey.d.ts'
 
 import type { YouTubeRendererElement } from './youtube.d.ts'
 

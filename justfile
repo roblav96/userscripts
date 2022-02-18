@@ -13,12 +13,10 @@ install:
 
 run:
 	-@fd -tf -e ts -E '*.d.ts' -X deno cache --unstable --no-check
-	@echo '█ '; echo
 	-@fd -tf -e ts -E '*.d.ts' -x deno cache --unstable
-	@echo
 	@deno run --unstable --no-check --allow-all src/mod.ts
 watch:
-	watchexec --clear --restart --watch=src --exts=ts --shell=bash -- just run
+	watchexec --clear --restart --watch=src --exts=ts --shell=bash -- 'echo -e "█ \n" && just run'
 
 serve:
 	miniserve --header 'Cache-Control: no-cache, no-store, must-revalidate' --interfaces=127.0.0.1 --port=14023 dist
