@@ -1,39 +1,46 @@
+import * as colors from 'https://deno.land/std/fmt/colors.ts'
 import * as fs from 'https://deno.land/std/fs/mod.ts'
 import * as path from 'https://deno.land/std/path/mod.ts'
 import { DIRS } from './mod.ts'
 
-export async function bundle(fpath: string) {
-	// console.info('bundle ->', fpath)
-	let file = await Deno.open(fpath, { read: true })
-	let { isFile, mtime } = await file.stat()
-	file.close()
-	if (!isFile) return
+export default async function bundler(srcpath: string) {
+	// console.info('bundler ->', srcpath)
 
-	let distpath = path.join(DIRS.dist, path.relative(DIRS.scripts, fpath))
-	distpath = distpath.replace(/\.ts$/, '.user.js')
+	let { isFile, mtime } = await Deno.stat(srcpath)
+	if (!isFile || !mtime) {
+		return
+	}
 
-	let fsource = await Deno.readTextFile(fpath)
-	fsource = fsource.replace(
+	let distpath = path.join(DIRS.dist, path.relative(DIRS.scripts, srcpath))
+	distpath = distpath.replace(/ts$/, 'user.js')
+	await fs.ensureDir(path.dirname(distpath))
+
+	let httpurl = distpath.replace(DIRS.dist, 'http://127.0.0.1:14023')
+	let srctext = await Deno.readTextFile(srcpath)
+	srctext = srctext.replace(
 		'// ==/UserScript==',
-		`// @downloadURL ${path.toFileUrl(distpath).toString()}\n// ==/UserScript==`,
+		`// @downloadURL ${httpurl}\n// ==/UserScript==`,
+		// `// @downloadURL ${path.toFileUrl(distpath).toString()}\n// ==/UserScript==`,
 	)
-	fsource = fsource.replace(
+	srctext = srctext.replace(
 		'// ==/UserScript==',
-		`// @version ${mtime?.valueOf()}\n// ==/UserScript==`,
+		`// @version ${mtime.valueOf()}\n// ==/UserScript==`,
 	)
-	let header = fsource.split('// ==UserScript==')[1].split('// ==/UserScript==')[0]
+	let header = srctext.split('// ==UserScript==')[1].split('// ==/UserScript==')[0]
 	header = `// ==UserScript==${header}// ==/UserScript==`
 
-	await fs.ensureDir(path.dirname(distpath))
 	let bundle = Deno.run({
-		cmd: ['deno', 'bundle', '--unstable', '--no-check', fpath, distpath],
+		cmd: ['deno', 'bundle', '--unstable', '--no-check', srcpath, distpath],
 	})
 	await bundle.status()
 	bundle.close()
+
 	await Deno.writeTextFile(distpath, `${header}\n\n${await Deno.readTextFile(distpath)}`)
 
-	// let { files } = await Deno.emit(fpath, {
-	// 	// sources: { [fpath]: fsource },
+	console.log(`${colors.underline(httpurl)}\n`)
+
+	// let { files } = await Deno.emit(srcpath, {
+	// 	// sources: { [srcpath]: srctext },
 	// 	check: false,
 	// 	bundle: 'esm',
 	// 	compilerOptions: {

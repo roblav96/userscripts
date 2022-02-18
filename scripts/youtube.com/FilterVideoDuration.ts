@@ -1,6 +1,5 @@
 // ==UserScript==
 // @name FilterVideoDuration@youtube.com
-// @namespace youtube.com
 // @match https://*.youtube.com/*
 // @noframes
 // @grant GM_addStyle

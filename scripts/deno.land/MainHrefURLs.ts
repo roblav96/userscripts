@@ -1,24 +1,22 @@
 // ==UserScript==
 // @name MainHrefURLs@deno.land
-// @namespace deno.land
 // @match https://deno.land/*
 // @noframes
 // ==/UserScript==
 
 import type {} from '../../types/violentmonkey.d.ts'
 
-function MainHrefURLs() {
-	if (document.readyState != 'complete') return false
-
+function MainHrefURLs(event: Event) {
+	console.log('readystatechange ->', `[${document.readyState}]`, event)
 	let selects = Array.from(document.getElementsByTagName('select'))
 	let select = selects.find((el) => el.id == 'version')
-	if (select && select.value != 'master') select.value = 'master'
+	if (select && select.value != 'main') select.value = 'main'
 
 	for (let el of Array.from(document.links).filter(Boolean)) {
 		if (!el.href) continue
 		let matchers = [
-			[/\b(@v\d+.\d+.\d+)\b/g, '@master'],
-			[/\b(v\d+.\d+.\d+)\b/g, 'master'],
+			[/\b(@v\d+.\d+.\d+)\b/g, '@main'],
+			[/\b(v\d+.\d+.\d+)\b/g, 'main'],
 		] as [RegExp, string][]
 		for (let [matcher, replace] of matchers) {
 			if (!matcher.test(el.href)) continue
@@ -26,7 +24,5 @@ function MainHrefURLs() {
 			break
 		}
 	}
-
-	document.removeEventListener('readystatechange', MainHrefURLs)
 }
-MainHrefURLs() || document.addEventListener('readystatechange', MainHrefURLs)
+document.addEventListener('readystatechange', MainHrefURLs, { once: true })
