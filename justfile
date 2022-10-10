@@ -3,21 +3,17 @@
 
 set shell := ["bash", "-uc"]
 
-_default:
-	@just --dump
-
 
 
 install:
 	fd -tf -e ts -E '*.d.ts' -X deno cache --unstable --no-check --reload
 
-run:
-	-@fd -tf -e ts -E '*.d.ts' -X deno cache --unstable --no-check
-	-@fd -tf -e ts -E '*.d.ts' -x deno cache --unstable
-	@echo
-	-@deno run --unstable --no-check --allow-all src/mod.ts
-watch:
-	watchexec --clear --restart --watch=src --exts=ts --shell=bash -- 'echo -e "█ \n" && just run'
+run main:
+	-@setsid --fork fd -tf -e ts -E '*.d.ts' -X deno cache --unstable --no-check
+	-@setsid --fork deno check --unstable --quiet {{main}}
+	-@deno run --unstable --no-check --allow-all {{main}}
+watch main:
+	watchexec --clear --restart --shell=bash --watch=src --exts=ts -- 'echo -e "█ \n" && just run {{main}}'
 
 serve:
 	miniserve --verbose --header 'Cache-Control: no-cache, no-store, must-revalidate' --interfaces=127.0.0.1 --port=14023 dist
