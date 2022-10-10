@@ -1,4 +1,4 @@
-// import 'https://raw.githubusercontent.com/roblav96/jellyfin-debrids/main/src/devops/console.ts'
+// import 'https://raw.githubusercontent.com/roblav96/futon-media-iptv/main/src/console.ts'
 
 import * as async from 'https://deno.land/std/async/mod.ts'
 import * as fs from 'https://deno.land/std/fs/mod.ts'
