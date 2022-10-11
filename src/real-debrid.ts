@@ -18,7 +18,7 @@ http.serve(
 			console.log(decoded.name)
 
 			let transfers = (await (
-				await fetch('https://api.real-debrid.com/rest/1.0/torrents', {
+				await fetch('https://api.real-debrid.com/rest/1.0/torrents?limit=100', {
 					headers: { authorization: `Bearer ${Deno.env.get('REALDEBRID_SECRET')}` },
 				})
 			).json()) as Transfer[]
