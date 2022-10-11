@@ -19,4 +19,5 @@ watch main:
 		-- 'echo -e "█ " && just run {{main}}'
 
 serve:
-	miniserve --verbose --header 'Cache-Control: no-cache, no-store, must-revalidate' --interfaces=127.0.0.1 --port=14023 dist
+	just run src/mod.ts & \
+		miniserve --verbose --header 'Cache-Control: no-cache, no-store, must-revalidate' --interfaces=127.0.0.1 --port=14023 dist

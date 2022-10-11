@@ -2,6 +2,9 @@
 // @name DebridsCached@rarbg.to
 // @match https://rarbg.to/*
 // @noframes
+// @grant GM_addStyle
+// @grant GM_getResourceText
+// @resource bulma https://cdn.jsdelivr.net/npm/bulma/css/bulma.css
 // ==/UserScript==
 
 import type {} from '../../types/violentmonkey.d.ts'
@@ -11,7 +14,16 @@ import type {} from '../../types/violentmonkey.d.ts'
 // // import { StandardWebSocketClient } from 'https://deno.land/x/websocket/mod.ts'
 
 function DebridsCached(event: Event) {
-	console.log('readystatechange ->', `[${document.readyState}]`, event)
+	const anchor = document.querySelector('[href^="magnet:"]') as HTMLAnchorElement
+
+	const button = document.createElement('button')
+	button.className = 'button'
+	button.textContent = 'Debrid'
+	button.onclick = (event) => {
+		fetch('http://127.0.0.1:15322/', { method: 'POST', body: JSON.stringify(anchor.href) })
+	}
+	anchor.after(button)
+
 	// console.log('window ->', window)
 	// console.log('onetime ->', onetime)
 	// console.log('shortcut ->', shortcut)
@@ -22,3 +34,9 @@ function DebridsCached(event: Event) {
 	// GM_setClipboard('idk')
 }
 document.addEventListener('readystatechange', DebridsCached, { once: true })
+
+// // GM_addStyle(GM_getResourceText('bulma'))
+// const bulma = GM_getResourceText('bulma')
+// const minireset = bulma.indexOf('/*! minireset.css')
+// const box = bulma.indexOf('.box{')
+// GM_addStyle(bulma.slice(0, minireset) + bulma.slice(box))
