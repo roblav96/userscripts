@@ -1,9 +1,17 @@
 import 'https://raw.githubusercontent.com/roblav96/futon-media-iptv/main/src/console.ts'
-import 'https://deno.land/std/dotenv/load.ts'
 
+import 'https://deno.land/std/dotenv/load.ts'
 import * as async from 'https://deno.land/std/async/mod.ts'
 import * as http from 'https://deno.land/std/http/mod.ts'
+import { assertExists } from 'https://deno.land/std/testing/asserts.ts'
 import { magnetDecode } from 'https://esm.sh/@ctrl/magnet-link?dev'
+
+const REALDEBRID_SECRET = Deno.env.get('REALDEBRID_SECRET')!
+assertExists(REALDEBRID_SECRET, `!Deno.env.get('REALDEBRID_SECRET')`)
+
+const rdinit = {
+	headers: { authorization: `Bearer ${REALDEBRID_SECRET}` },
+} as RequestInit
 
 http.serve(
 	async (request) => {
@@ -18,9 +26,7 @@ http.serve(
 			console.log(decoded.name)
 
 			let transfers = (await (
-				await fetch('https://api.real-debrid.com/rest/1.0/torrents?limit=100', {
-					headers: { authorization: `Bearer ${Deno.env.get('REALDEBRID_SECRET')}` },
-				})
+				await fetch('https://api.real-debrid.com/rest/1.0/torrents?limit=100', rdinit)
 			).json()) as Transfer[]
 			let transfer = transfers.find((v) => v.hash.toLowerCase() == decoded.infoHash)
 			if (transfer) {
@@ -30,27 +36,51 @@ http.serve(
 
 			let download = (await (
 				await fetch('https://api.real-debrid.com/rest/1.0/torrents/addMagnet', {
+					...rdinit,
 					method: 'POST',
-					headers: { authorization: `Bearer ${Deno.env.get('REALDEBRID_SECRET')}` },
 					body: new URLSearchParams({ magnet }),
 				})
 			).json()) as Download
-			await async.delay(3000)
-			transfer = (await (
-				await fetch(`https://api.real-debrid.com/rest/1.0/torrents/info/${download.id}`, {
-					headers: { authorization: `Bearer ${Deno.env.get('REALDEBRID_SECRET')}` },
-				})
-			).json()) as Transfer
+			// console.log('download ->', download)
+			for (let i = 0; i < 5; i++) {
+				transfer = (await (
+					await fetch(
+						`https://api.real-debrid.com/rest/1.0/torrents/info/${download.id}`,
+						rdinit,
+					)
+				).json()) as Transfer
+				// console.log('transfer ->', transfer)
+				if (transfer.filename == 'Invalid Magnet') {
+					break
+				}
+				if (transfer.status == 'magnet_error') {
+					break
+				}
+				if (transfer.files.length > 0) {
+					break
+				}
+				await async.delay(1000)
+			}
 
-			let files = transfer.files.filter((v) => {
+			let files = (transfer?.files ?? []).filter((v) => {
 				if (v.path.toLowerCase().includes('rarbg.com.mp4')) return false
 				return ['avi', '.mp4', '.mkv'].some((ext) => v.path.endsWith(ext))
 			})
+
+			if (!transfer?.id || files.length == 0) {
+				await fetch(`https://api.real-debrid.com/rest/1.0/torrents/delete/${download.id}`, {
+					...rdinit,
+					method: 'DELETE',
+				}).catch(() => {})
+				console.error(decoded.name)
+				return new Response(null, { headers })
+			}
+
 			await fetch(
 				`https://api.real-debrid.com/rest/1.0/torrents/selectFiles/${transfer.id}`,
 				{
+					...rdinit,
 					method: 'POST',
-					headers: { authorization: `Bearer ${Deno.env.get('REALDEBRID_SECRET')}` },
 					body: new URLSearchParams({ files: files.map((v) => v.id).join() }),
 				},
 			)
@@ -58,7 +88,7 @@ http.serve(
 			console.info(decoded.name)
 			return new Response(null, { headers })
 		} catch (error) {
-			console.error('http.serve request -> %O', error)
+			console.error('http.serve request ->', error)
 			return new Response(error.toString(), {
 				headers,
 				status: http.Status.InternalServerError,
@@ -84,6 +114,8 @@ interface Transfer {
 	host: string
 	id: string
 	links: string[]
+	original_bytes: number
+	original_filename: string
 	progress: number
 	seeders: number
 	speed: number
