@@ -63,7 +63,9 @@ http.serve(
 			}
 
 			let files = (transfer?.files ?? []).filter((v) => {
-				if (v.path.toLowerCase().includes('rarbg.com.mp4')) return false
+				let path = v.path.toLowerCase()
+				if (path.includes('rarbg.com.mp4')) return false
+				if (path.includes('sample')) return false
 				return ['avi', '.mp4', '.mkv'].some((ext) => v.path.endsWith(ext))
 			})
 
