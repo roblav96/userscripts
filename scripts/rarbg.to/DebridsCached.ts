@@ -2,9 +2,7 @@
 // @name DebridsCached@rarbg.to
 // @match https://rarbg.to/*
 // @noframes
-// @grant GM_addStyle
-// @grant GM_getResourceText
-// @resource bulma https://cdn.jsdelivr.net/npm/bulma/css/bulma.css
+// @require https://cdn.jsdelivr.net/npm/@violentmonkey/dom@2
 // ==/UserScript==
 
 import type {} from '../../types/violentmonkey.d.ts'
@@ -35,6 +33,9 @@ function DebridsCached(event: Event) {
 }
 document.addEventListener('readystatechange', DebridsCached, { once: true })
 
+// @resource bulma https://cdn.jsdelivr.net/npm/bulma/css/bulma.css
+// @grant GM_addStyle
+// @grant GM_getResourceText
 // // GM_addStyle(GM_getResourceText('bulma'))
 // const bulma = GM_getResourceText('bulma')
 // const minireset = bulma.indexOf('/*! minireset.css')
