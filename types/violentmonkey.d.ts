@@ -6,9 +6,8 @@ import type {
 	hm,
 	m,
 	observe,
-} from 'https://esm.sh/@violentmonkey/dom@2?dev';
-
-// import {} from 'https://esm.sh/@violentmonkey/dom@2?dev'
+} from 'npm:@violentmonkey/dom@latest';
+import type { register } from 'npm:@violentmonkey/shortcut@latest';
 
 declare global {
 	var unsafeWindow: typeof window;
@@ -21,7 +20,7 @@ declare global {
 		hm: typeof hm;
 		m: typeof m;
 		observe: typeof observe;
-		registerShortcut(shortcut: string, callback: () => void): void;
+		register: typeof register;
 	};
 
 	var GM_info: {
