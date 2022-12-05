@@ -2,7 +2,6 @@
 // @name DebridsCached@rarbg.to
 // @match https://rarbg.to/*
 // @noframes
-// @require https://cdn.jsdelivr.net/npm/@violentmonkey/dom@2
 // ==/UserScript==
 
 import type {} from '../../types/violentmonkey.d.ts'
