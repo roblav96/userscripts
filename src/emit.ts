@@ -5,6 +5,7 @@ import * as fs from 'https://deno.land/std/fs/mod.ts'
 import * as http from 'https://deno.land/std/http/mod.ts'
 import * as path from 'https://deno.land/std/path/mod.ts'
 import { bundle } from 'https://deno.land/x/emit/mod.ts'
+import * as esbuild from 'https://deno.land/x/esbuild/mod.js'
 
 const ROOT = path.dirname(path.dirname(path.fromFileUrl(import.meta.url)))
 const SCRIPTS = path.join(ROOT, 'scripts')
@@ -20,9 +21,22 @@ for await (let entry of fs.walk(SCRIPTS, {
 	includeDirs: false,
 	skip: [/\.d\.ts$/],
 })) {
+	if (entry.name != 'DebridsCached.ts') {
+		continue
+	}
 	console.log('entry ->', entry)
-	const result = await bundle(entry.path)
-	console.log('result ->', result.code)
+
+	// const result = await esbuild.transform(await Deno.readTextFile(entry.path), {
+	const result = await esbuild.build({
+		bundle: true,
+		entryPoints: [entry.path],
+		sourcemap: 'inline',
+	})
+	console.log('result ->', result)
+
+	// const result = await bundle(entry.path)
+	// console.log('result ->', result.code)
+
 	// let distpath = path.join(DIST, path.relative(SCRIPTS, entry.path))
 	// distpath = distpath.replace(/ts$/, 'user.js')
 	// await fs.ensureDir(path.dirname(distpath))

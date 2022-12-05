@@ -7,13 +7,33 @@
 
 import type {} from '../../types/violentmonkey.d.ts'
 
+// import { h, hm, m, observe } from 'https://esm.sh/@violentmonkey/dom?dev'
+// import { register } from 'https://esm.sh/@violentmonkey/shortcut@1.2.5?dev'
+
+// import { h, hm, m, observe } from 'https://cdn.skypack.dev/@violentmonkey/dom?dts'
+// import { register } from 'https://cdn.skypack.dev/@violentmonkey/shortcut?dts'
+
+// import { h, hm, m, observe } from 'npm:@violentmonkey/dom'
+// import { register } from 'npm:@violentmonkey/shortcut'
+
 // import * as shortcut from 'https://esm.sh/@violentmonkey/shortcut?dev'
 // import onetime from 'https://esm.sh/onetime?dev'
 // // import { StandardWebSocketClient } from 'https://deno.land/x/websocket/mod.ts'
 
-console.log('global ->', performance.toJSON())
+// register('idk', () => {})
+
+// observe(document.body, () => {
+// 	const node = document.querySelector('.profile')
+// 	if (node) {
+// 		console.log("It's there!")
+// 		return true
+// 	}
+// })
+
+// console.log('GM_info ->', GM_info)
+// console.log('global ->', performance.toJSON())
 function DebridsCached(event: Event) {
-	console.log('readystatechange ->', performance.toJSON())
+	// console.log('readystatechange ->', performance.toJSON())
 	const anchor = document.querySelector('[href^="magnet:"]') as HTMLAnchorElement
 	const button = document.createElement('button')
 	button.className = 'button'
@@ -33,13 +53,13 @@ function DebridsCached(event: Event) {
 	// GM_setClipboard('idk')
 }
 document.addEventListener('readystatechange', DebridsCached, { once: true })
-document.addEventListener(
-	'DOMContentLoaded',
-	() => {
-		console.log('DOMContentLoaded ->', performance.toJSON())
-	},
-	{ once: true },
-)
+// document.addEventListener(
+// 	'DOMContentLoaded',
+// 	() => {
+// 		console.log('DOMContentLoaded ->', performance.toJSON())
+// 	},
+// 	{ once: true },
+// )
 
 // @resource bulma https://cdn.jsdelivr.net/npm/bulma/css/bulma.css
 // @grant GM_addStyle

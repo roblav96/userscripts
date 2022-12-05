@@ -6,12 +6,12 @@ set shell := ["bash", "-uc"]
 
 
 install:
-	fd -tf -e ts -E '*.d.ts' -X deno cache --unstable --no-lock --no-check --reload
+	fd -tf -e ts -E '*.d.ts' -X deno cache --unstable --no-check --reload
 
 run main:
-	-@setsid --fork fd -tf -e ts -E '*.d.ts' -X deno cache --unstable --no-lock --no-check
-	-@setsid --fork deno check --unstable --no-lock --quiet {{main}}
-	-@deno run --unstable --no-lock --no-check --allow-all {{main}}
+	-@setsid --fork fd -tf -e ts -E '*.d.ts' -X deno cache --unstable --no-check
+	-@setsid --fork deno check --unstable --quiet {{main}}
+	-@deno run --unstable --no-check --allow-all {{main}}
 
 watch main:
 	DENO_ENV="development" \
