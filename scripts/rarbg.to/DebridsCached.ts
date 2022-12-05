@@ -11,9 +11,10 @@ import type {} from '../../types/violentmonkey.d.ts'
 // import onetime from 'https://esm.sh/onetime?dev'
 // // import { StandardWebSocketClient } from 'https://deno.land/x/websocket/mod.ts'
 
+console.log('global ->', performance.toJSON())
 function DebridsCached(event: Event) {
+	console.log('readystatechange ->', performance.toJSON())
 	const anchor = document.querySelector('[href^="magnet:"]') as HTMLAnchorElement
-
 	const button = document.createElement('button')
 	button.className = 'button'
 	button.textContent = 'Debrid'
@@ -32,6 +33,13 @@ function DebridsCached(event: Event) {
 	// GM_setClipboard('idk')
 }
 document.addEventListener('readystatechange', DebridsCached, { once: true })
+document.addEventListener(
+	'DOMContentLoaded',
+	() => {
+		console.log('DOMContentLoaded ->', performance.toJSON())
+	},
+	{ once: true },
+)
 
 // @resource bulma https://cdn.jsdelivr.net/npm/bulma/css/bulma.css
 // @grant GM_addStyle
