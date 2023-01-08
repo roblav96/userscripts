@@ -1,11 +1,11 @@
 import 'https://raw.githubusercontent.com/roblav96/futon-media-iptv/main/src/console.ts'
 
 import * as async from 'https://deno.land/std/async/mod.ts'
+import * as esbuild from 'https://deno.land/x/esbuild/mod.js'
 import * as fs from 'https://deno.land/std/fs/mod.ts'
 import * as http from 'https://deno.land/std/http/mod.ts'
 import * as path from 'https://deno.land/std/path/mod.ts'
 import { bundle } from 'https://deno.land/x/emit/mod.ts'
-import * as esbuild from 'https://deno.land/x/esbuild/mod.js'
 
 const ROOT = path.dirname(path.dirname(path.fromFileUrl(import.meta.url)))
 const SCRIPTS = path.join(ROOT, 'scripts')
