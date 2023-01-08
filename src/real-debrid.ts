@@ -7,7 +7,7 @@ import { assertExists } from 'https://deno.land/std/testing/asserts.ts'
 import { magnetDecode } from 'https://esm.sh/@ctrl/magnet-link?dev'
 
 const REALDEBRID_SECRET = Deno.env.get('REALDEBRID_SECRET')!
-assertExists(REALDEBRID_SECRET, `!Deno.env.get('REALDEBRID_SECRET')`)
+assertExists(REALDEBRID_SECRET, '!REALDEBRID_SECRET')
 
 const rdinit = {
 	headers: { authorization: `Bearer ${REALDEBRID_SECRET}` },
@@ -26,12 +26,15 @@ http.serve(
 			console.log(decoded.name)
 
 			let transfers = (await (
-				await fetch('https://api.real-debrid.com/rest/1.0/torrents?limit=100', rdinit)
+				await fetch('https://api.real-debrid.com/rest/1.0/torrents?limit=999', rdinit)
 			).json()) as Transfer[]
 			let transfer = transfers.find((v) => v.hash.toLowerCase() == decoded.infoHash)
 			if (transfer) {
-				console.info(decoded.name)
-				return new Response(null, { headers })
+				console.warn(decoded.name)
+				await fetch(`https://api.real-debrid.com/rest/1.0/torrents/delete/${transfer.id}`, {
+					...rdinit,
+					method: 'DELETE',
+				})
 			}
 
 			let download = (await (
@@ -41,7 +44,7 @@ http.serve(
 					body: new URLSearchParams({ magnet }),
 				})
 			).json()) as Download
-			// console.log('download ->', download)
+			console.log('download ->', download)
 			for (let i = 0; i < 5; i++) {
 				transfer = (await (
 					await fetch(
@@ -49,7 +52,7 @@ http.serve(
 						rdinit,
 					)
 				).json()) as Transfer
-				// console.log('transfer ->', transfer)
+				console.log('transfer ->', transfer)
 				if (transfer.filename == 'Invalid Magnet') {
 					break
 				}
@@ -70,24 +73,23 @@ http.serve(
 			})
 
 			if (!transfer?.id || files.length == 0) {
+				console.error(decoded.name)
 				await fetch(`https://api.real-debrid.com/rest/1.0/torrents/delete/${download.id}`, {
 					...rdinit,
 					method: 'DELETE',
 				}).catch(() => {})
-				console.error(decoded.name)
-				return new Response(null, { headers })
+			} else {
+				await fetch(
+					`https://api.real-debrid.com/rest/1.0/torrents/selectFiles/${transfer.id}`,
+					{
+						...rdinit,
+						method: 'POST',
+						body: new URLSearchParams({ files: files.map((v) => v.id).join() }),
+					},
+				)
+				console.info(decoded.name)
 			}
 
-			await fetch(
-				`https://api.real-debrid.com/rest/1.0/torrents/selectFiles/${transfer.id}`,
-				{
-					...rdinit,
-					method: 'POST',
-					body: new URLSearchParams({ files: files.map((v) => v.id).join() }),
-				},
-			)
-
-			console.info(decoded.name)
 			return new Response(null, { headers })
 		} catch (error) {
 			console.error('http.serve request ->', error)
