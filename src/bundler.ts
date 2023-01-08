@@ -4,7 +4,7 @@ import * as path from 'https://deno.land/std/path/mod.ts'
 import { bundle } from 'https://deno.land/x/emit/mod.ts'
 import { DIST, SCRIPTS } from './mod.ts'
 
-export default async function bundler(srcpath: string) {
+export async function bundler(srcpath: string) {
 	// console.info('bundler ->', srcpath)
 
 	let distpath = path.join(DIST, path.relative(SCRIPTS, srcpath))

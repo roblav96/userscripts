@@ -4,7 +4,7 @@ import * as async from 'https://deno.land/std/async/mod.ts'
 import * as fs from 'https://deno.land/std/fs/mod.ts'
 import * as http from 'https://deno.land/std/http/mod.ts'
 import * as path from 'https://deno.land/std/path/mod.ts'
-import bundler from './bundler.ts'
+import { bundler } from './bundler.ts'
 
 export const ROOT = path.dirname(path.dirname(path.fromFileUrl(import.meta.url)))
 export const SCRIPTS = path.join(ROOT, 'scripts')
