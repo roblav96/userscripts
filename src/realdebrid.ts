@@ -9,13 +9,13 @@ const rdinit = {
 	headers: { authorization: `Bearer ${REALDEBRID_SECRET}` },
 } as RequestInit
 
-export default async (decoded: MagnetData) => {
+export async function realdebrid(decoded: MagnetData) {
 	let transfers = (await (
 		await fetch('https://api.real-debrid.com/rest/1.0/torrents?limit=999', rdinit)
 	).json()) as Transfer[]
 	let transfer = transfers.find((v) => v.hash.toLowerCase() == decoded.infoHash)
 	if (transfer) {
-		console.warn('[real-debrid]', decoded.name)
+		console.warn('[RD]', decoded.name)
 		await fetch(`https://api.real-debrid.com/rest/1.0/torrents/delete/${transfer.id}`, {
 			...rdinit,
 			method: 'DELETE',
@@ -29,12 +29,12 @@ export default async (decoded: MagnetData) => {
 			body: new URLSearchParams({ magnet: magnetEncode(decoded) }),
 		})
 	).json()) as Download
-	// console.log('[real-debrid]', 'download ->', download)
+	// console.log('[RD]', 'download ->', download)
 	for (let i = 0; i < 5; i++) {
 		transfer = (await (
 			await fetch(`https://api.real-debrid.com/rest/1.0/torrents/info/${download.id}`, rdinit)
 		).json()) as Transfer
-		// console.log('[real-debrid]', 'transfer ->', transfer)
+		// console.log('[RD]', 'transfer ->', transfer)
 		if (transfer.filename == 'Invalid Magnet') {
 			break
 		}
@@ -55,7 +55,7 @@ export default async (decoded: MagnetData) => {
 	})
 
 	if (!transfer?.id || files.length == 0) {
-		console.error('[real-debrid]', decoded.name)
+		console.error('[RD]', decoded.name)
 		await fetch(`https://api.real-debrid.com/rest/1.0/torrents/delete/${download.id}`, {
 			...rdinit,
 			method: 'DELETE',
@@ -66,7 +66,7 @@ export default async (decoded: MagnetData) => {
 			method: 'POST',
 			body: new URLSearchParams({ files: files.map((v) => v.id).join() }),
 		})
-		console.info('[real-debrid]', decoded.name)
+		console.info('[RD]', decoded.name)
 	}
 }
 

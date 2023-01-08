@@ -2,8 +2,9 @@ import 'https://raw.githubusercontent.com/roblav96/futon-media-iptv/main/src/con
 
 import 'https://deno.land/std/dotenv/load.ts'
 import * as http from 'https://deno.land/std/http/mod.ts'
-import RealDebrid from './real-debrid.ts'
+import { alldebrid } from './alldebrid.ts'
 import { magnetDecode } from 'https://esm.sh/@ctrl/magnet-link?dev'
+import { realdebrid } from './realdebrid.ts'
 
 http.serve(
 	async (request) => {
@@ -16,7 +17,11 @@ http.serve(
 			decoded.infoHash = decoded.infoHash?.toLowerCase()
 			console.log(decoded.name)
 
-			await Promise.allSettled([RealDebrid(decoded)])
+			await Promise.allSettled([
+				realdebrid(decoded),
+				alldebrid(decoded),
+				//
+			])
 
 			return new Response(null, { headers })
 		} catch (error) {
