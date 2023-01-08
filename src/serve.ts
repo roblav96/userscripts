@@ -23,6 +23,7 @@ http.serve(
 				//
 			])
 
+			console.info(decoded.name)
 			return new Response(null, { headers })
 		} catch (error) {
 			console.error('http.serve request ->', error)
